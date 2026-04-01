@@ -3,15 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>简单商城演示</title>
+    <title>简单商城演示 - 微信支付</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 微信支付弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .qr-code {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            border: 3px solid #07c160;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .payment-amount {
+            font-size: 2em;
+            font-weight: bold;
+            color: #07c160;
+            margin: 20px 0;
+        }
+
+        .payment-steps {
+            text-align: left;
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .payment-steps ol {
+            margin-left: 20px;
+        }
+
+        .payment-steps li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover {
+            color: #333;
+        }
+
+        .confirm-button {
+            background: #07c160;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .confirm-button:hover {
+            background: #06ad56;
+            transform: scale(1.05);
+        }
+
+        .wechat-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .modal-header {
+            position: relative;
+        }
+
+        .product-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🛒 简单商城演示</h1>
-            <p class="subtitle">从开发到部署到支付的完整流程示例</p>
+            <p class="subtitle">微信支付版本 - 扫码付款</p>
         </header>
 
         <main>
@@ -22,9 +165,9 @@
                     <h3>Python 自动化工具教程</h3>
                     <p class="description">学习如何用 Python 自动化办公工作</p>
                     <div class="price">¥99.00</div>
-                    <a href="https://buy.stripe.com/test_aIM16sbFna0e8G0001" target="_blank" class="buy-button">
-                        立即购买
-                    </a>
+                    <button class="buy-button" onclick="showPayment('Python 自动化工具教程', 99.00)">
+                        <span class="wechat-icon">💚</span>微信支付
+                    </button>
                 </div>
 
                 <!-- 产品 2 -->
@@ -33,40 +176,122 @@
                     <h3>市政工程实务指南</h3>
                     <p class="description">工程设计与管理实战经验总结</p>
                     <div class="price">¥149.00</div>
-                    <a href="https://buy.stripe.com/test_aIM16sbFna0e8G0001" target="_blank" class="buy-button">
-                        立即购买
-                    </a>
+                    <button class="buy-button" onclick="showPayment('市政工程实务指南', 149.00)">
+                        <span class="wechat-icon">💚</span>微信支付
+                    </button>
                 </div>
 
                 <!-- 产品 3 -->
                 <div class="product-card">
                     <div class="product-image">🚀</div>
-                    <h3>Web 开速入门课程</h3>
+                    <h3>Web 快速入门课程</h3>
                     <p class="description">快速掌握网页开发基础技能</p>
                     <div class="price">¥199.00</div>
-                    <a href="https://buy.stripe.com/test_aIM16sbFna0e8G0001" target="_blank" class="buy-button">
-                        立即购买
-                    </a>
+                    <button class="buy-button" onclick="showPayment('Web 快速入门课程', 199.00)">
+                        <span class="wechat-icon">💚</span>微信支付
+                    </button>
                 </div>
             </div>
 
             <div class="info-box">
-                <h2>📌 这是一个演示项目</h2>
-                <p>本页面演示了从开发到部署到支付的完整流程：</p>
+                <h2>📌 微信支付说明</h2>
+                <p>本页面使用微信个人收款码实现支付功能：</p>
                 <ol>
-                    <li>✅ 创建简单的 HTML 产品展示页面</li>
-                    <li>✅ 推送到 GitHub 仓库</li>
-                    <li>✅ 连接 Vercel 免费部署</li>
-                    <li>✅ 使用 Stripe Payment Link 实现支付（无需后端代码）</li>
-                    <li>✅ 用户点击购买按钮完成支付</li>
+                    <li>✅ 点击"微信支付"按钮</li>
+                    <li>✅ 扫描二维码付款</li>
+                    <li>✅ 付款后点击"已付款"按钮</li>
+                    <li>✅ 商家确认收款后发货</li>
                 </ol>
-                <p class="note"><strong>注意：</strong>点击"立即购买"会跳转到 Stripe 测试支付页面</p>
+                <p class="note">
+                    <strong>注意：</strong>这是个人收款码方案，适合小额交易。
+                    付款后请保留截图，商家会在微信中确认收款并发货。
+                </p>
             </div>
         </main>
 
         <footer>
-            <p>演示项目 | 部署在 Vercel | 支付使用 Stripe</p>
+            <p>演示项目 | 部署在 Vercel | 支付使用微信收款码</p>
         </footer>
     </div>
+
+    <!-- 微信支付弹窗 -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-button" onclick="closePayment()">&times;</span>
+            </div>
+
+            <h2 style="color: #07c160; margin-bottom: 20px;">
+                <span class="wechat-icon">💚</span>微信扫码支付
+            </h2>
+
+            <div class="product-name" id="productName">产品名称</div>
+
+            <div class="payment-amount" id="paymentAmount">¥0.00</div>
+
+            <!-- 微信收款码图片 -->
+            <div class="qr-code">
+                <img id="wechatQRCode" src="https://cdn.jsdelivr.net/gh/PwInG001/simple-shop-demo@main/images/wechat-qr.jpg" alt="微信收款码">
+            </div>
+
+            <div class="payment-steps">
+                <h4>付款步骤：</h4>
+                <ol>
+                    <li>打开微信，扫描上方二维码</li>
+                    <li>确认付款金额</li>
+                    <li>输入支付密码完成付款</li>
+                    <li>付款成功后，点击下方按钮</li>
+                </ol>
+            </div>
+
+            <button class="confirm-button" onclick="confirmPayment()">
+                ✅ 已付款，确认订单
+            </button>
+
+            <div class="note">
+                <strong>重要提示：</strong>
+                <br>付款后请保留截图，商家会在微信中确认收款。
+                <br>确认收款后，您将收到产品（下载链接/激活码等）。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = '';
+        let currentAmount = 0;
+
+        function showPayment(productName, amount) {
+            currentProduct = productName;
+            currentAmount = amount;
+
+            // 设置产品信息
+            document.getElementById('productName').textContent = productName;
+            document.getElementById('paymentAmount').textContent = '¥' + amount.toFixed(2);
+
+            // 显示弹窗
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function closePayment() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function confirmPayment() {
+            // 这里可以添加订单提交逻辑
+            // 例如：发送到服务器、记录到数据库等
+
+            alert('✅ 订单已提交！\n\n商家将在微信中确认您的收款，\n确认后会尽快发货。\n\n如有问题，请添加微信联系：[你的微信号]');
+
+            closePayment();
+        }
+
+        // 点击弹窗外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target === modal) {
+                closePayment();
+            }
+        }
+    </script>
 </body>
 </html>

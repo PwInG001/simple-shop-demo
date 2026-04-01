@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单商城演示</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 简单商城演示</h1>
+            <p class="subtitle">从开发到部署到支付的完整流程示例</p>
+        </header>
+
+        <main>
+            <div class="product-grid">
+                <!-- 产品 1 -->
+                <div class="product-card">
+                    <div class="product-image">📦</div>
+                    <h3>Python 自动化工具教程</h3>
+                    <p class="description">学习如何用 Python 自动化办公工作</p>
+                    <div class="price">¥99.00</div>
+                    <a href="https://buy.stripe.com/test_aIM16sbFna0e8G0001" target="_blank" class="buy-button">
+                        立即购买
+                    </a>
+                </div>
+
+                <!-- 产品 2 -->
+                <div class="product-card">
+                    <div class="product-image">🎯</div>
+                    <h3>市政工程实务指南</h3>
+                    <p class="description">工程设计与管理实战经验总结</p>
+                    <div class="price">¥149.00</div>
+                    <a href="https://buy.stripe.com/test_aIM16sbFna0e8G0001" target="_blank" class="buy-button">
+                        立即购买
+                    </a>
+                </div>
+
+                <!-- 产品 3 -->
+                <div class="product-card">
+                    <div class="product-image">🚀</div>
+                    <h3>Web 开速入门课程</h3>
+                    <p class="description">快速掌握网页开发基础技能</p>
+                    <div class="price">¥199.00</div>
+                    <a href="https://buy.stripe.com/test_aIM16sbFna0e8G0001" target="_blank" class="buy-button">
+                        立即购买
+                    </a>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h2>📌 这是一个演示项目</h2>
+                <p>本页面演示了从开发到部署到支付的完整流程：</p>
+                <ol>
+                    <li>✅ 创建简单的 HTML 产品展示页面</li>
+                    <li>✅ 推送到 GitHub 仓库</li>
+                    <li>✅ 连接 Vercel 免费部署</li>
+                    <li>✅ 使用 Stripe Payment Link 实现支付（无需后端代码）</li>
+                    <li>✅ 用户点击购买按钮完成支付</li>
+                </ol>
+                <p class="note"><strong>注意：</strong>点击"立即购买"会跳转到 Stripe 测试支付页面</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>演示项目 | 部署在 Vercel | 支付使用 Stripe</p>
+        </footer>
+    </div>
+</body>
+</html>
